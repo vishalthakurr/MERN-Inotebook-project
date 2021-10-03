@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
-const mongoUri ="//localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false";
+const mongoUri ="mongodb://localhost:27017/inotebook";
 
-const connectmongoo =  ()=>{
+mongoose.connect(mongoUri,{
+    // useCreateIndex: true,
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
+    // useFindAndModify :false
+}).then(()=>{
+    console.log("connection suceesful");
+}).catch((e)=>{
+    console.log(e);
+})
 
-    mongoose.connect(mongoUri,()=>{
-        console.log("connection sucessfull");
-    })
-}
 
-module.exports=  connectmongoo;
