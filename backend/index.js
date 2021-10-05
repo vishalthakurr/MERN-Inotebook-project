@@ -11,9 +11,9 @@ app.use(express.json()) // for middle ware to req for json
 app.use('/api/auth',require('./routes/auth'))
 app.use("/api/notes",require("./routes/notes.js"))
 
-// app.get('/', (req, res) => {
-//   res.send('Hello vishal!')
-// })
+app.get('/', (req, res) => {
+  res.send('Hello vishal!')
+})
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
