@@ -1,11 +1,17 @@
+
 import React from 'react'
 
-function About() {
-    return (
-        <div>
-        <h1>this is About</h1>
 
-            
+
+
+const About =()=> {
+
+  
+        
+    return (
+    
+        <div>
+         this is about page
         </div>
     )
 }
