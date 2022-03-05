@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const fetchuser = require("../middleware/fetchuser");
 
-fetchuser
+
 
 
 
@@ -14,24 +14,26 @@ jwtsect = "vishalthakur1742000"
 
 //Route 1 create a user  using Post "/api/auth/createuser" . doesn't require auth
 router.post('/createuser', [
-    body('name', "name is empty").isLength({ min: 5 }),
+    body('name', "name is empty").isLength({ min:4 }),
     body('email', 'enter a valid email').isEmail(),
     body('password', "password- must be altest 5 character").isLength({ min: 5 })
 ], async (req, res) => {
 
+    let success= false;
+
     //if there are errpr , return bad request and thr error
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success ,errors: errors.array() });
     }
-
+ 
     //  wether the user already exists
     try {
 
         let user = await User.findOne({ email: req.body.email });
 
         if (user) {
-            return res.status(400).json({ error: "already  email exist" })
+            return res.status(400).json({ success ,serror: "already  email exist" })
         }
 
         //password stored to hash
@@ -59,7 +61,8 @@ router.post('/createuser', [
         //   .catch(err=>
         //       console.log(err))
         //   res.json({error : "please enter valid data" , message:err.message}))
-        res.json({ jwttoken })
+        success= true;
+        res.json({ success,jwttoken })
 
     }
 
@@ -77,6 +80,8 @@ router.post('/login', [
     body('email', 'enter a valid email').isEmail(),
     body('password', "password cannot be blank").exists(),
 ], async (req, res) => {
+  let   success = false;
+ 
 
     //if there are errpr , return bad request and thr error
     const errors = validationResult(req);
@@ -90,6 +95,8 @@ router.post('/login', [
 
         let user = await User.findOne({ email });
         if (!user) {
+            success = false;
+
             return res.status(400).json({ error: "please try to login with  correct  credentials" });
         }
 
@@ -97,7 +104,8 @@ router.post('/login', [
         const passcomp = await bcrypt.compare(password, user.password);
 
         if (!passcomp) {
-            return res.status(400).json({ error: "please try to login with  correct  credentials" });
+            success = false;
+            return res.status(400).json({ success, error: "please try to login with  correct  credentials" });
         }
 
 
@@ -109,8 +117,9 @@ router.post('/login', [
         }
         const jwttoken = jwt.sign(data, jwtsect)
         console.log(jwttoken);
+        success =true
 
-        res.json({ jwttoken })
+        res.json({  success ,jwttoken })
     }
 
     catch (e) {
